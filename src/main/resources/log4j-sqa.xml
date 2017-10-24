@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Appenders>
+        <RollingFile name="rollingFileAppender"
+                     fileName="${sys:catalina.base}/logs/${sys:app_name}.log"
+                     immediateFlush="true" append="true"
+                     filePattern="${sys:catalina.base}/logs/$${date:yyyy-MM-dd}/${sys:app_name}_%d{yyyy-MM-dd-HH-mm}-%i.log.gz">
+            <PatternLayout>
+                <pattern>%d{ISO8601} %-5p {%t} %c{1} - %m%n</pattern>
+            </PatternLayout>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="20 MB" />
+                <CronTriggeringPolicy schedule="0 0 0-23 ? * * *" evaluateOnStartup="true"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10" compressionLevel="1" />
+        </RollingFile>
+        
+        <Async name="rollingFileAyncAppender">
+            <AppenderRef ref="rollingFileAppender" />
+        </Async>
+
+
+        <Console name="STDOUT" target="SYSTEM_OUT">
+            <PatternLayout>
+                <pattern>%d{ISO8601} %-5p {%t} %c{1} - %m%n</pattern>
+            </PatternLayout>
+        </Console>
+    </Appenders>
+
+    <Loggers>
+        <Logger name="org.apache.http" level="ALL" additivity="false">
+            <AppenderRef ref="rollingFileAyncAppender" />
+        </Logger>
+        <Logger name="com.amazonaws" level="ALL" additivity="false">
+            <AppenderRef ref="rollingFileAyncAppender" />
+        </Logger>
+        <Logger name="com.asurion.cloud.aws.cep" level="ALL" additivity="false">
+            <AppenderRef ref="rollingFileAyncAppender" />
+        </Logger >
+        <Root level="ALL">
+            <AppenderRef ref="rollingFileAyncAppender" />
+        </Root>
+    </Loggers>
+</Configuration>
