@@ -18,5 +18,6 @@ import yahoo.garg.sharad.springmockitojunit.util.Profiles;
 @Configuration
 @Profile(Profiles.DEV)
 public class CloudContextConfiguration {
-
+     // inserting this text to kick Jenkins build
+     // using jenkins git plugin
 }
