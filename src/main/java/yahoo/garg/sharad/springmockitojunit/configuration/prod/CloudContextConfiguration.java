@@ -34,7 +34,7 @@ public class CloudContextConfiguration {
     AWSCredentialsProvider awsCredProvider() {
 	_logger.info("Creating AWSCredentialsProvider using DefaultAWSCredentialsProviderChain");
 	_logger.info("Order in which it will look for credentials  -> ENV, SYSTEM, PROFILE, INSTANCE");
-	AWSCredentialsProvider awsCredProvider = new AWSCredentialsProviderChain(new InstanceProfileCredentialsProvider());
+	AWSCredentialsProvider awsCredProvider = new AWSCredentialsProviderChain(new InstanceProfileCredentialsProvider(true));
 	_logger.info("Returning AWSCredentialsProvider instance");
 	return awsCredProvider;
     }

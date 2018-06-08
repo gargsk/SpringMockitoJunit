@@ -5,6 +5,10 @@
  */
 package yahoo.garg.sharad.springmockitojunit.util;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Size;
+
 /**
  *
  * @author Sharad Garg 
@@ -16,4 +20,10 @@ public class Profiles {
     public static final String DEV = "dev";
     public static final String SQA = "sqa";
     public static final String PROD = "prod";
+
+    //@Size
+
+    //@Min()
+
+    //@Past
 }

@@ -5,10 +5,8 @@
  */
 package yahoo.garg.sharad.springmockitojunit.initialization;
 
-import javax.servlet.FilterRegistration;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRegistration;
+import javax.servlet.*;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
@@ -18,6 +16,7 @@ import org.springframework.web.context.request.RequestContextListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.DispatcherServlet;
+import yahoo.garg.sharad.springmockitojunit.configuration.SwaggerUISecurityConfiguration;
 import yahoo.garg.sharad.springmockitojunit.configuration.WebCommonContextConfig;
 
 /**
@@ -48,6 +47,8 @@ public class ApplicationInitializer implements WebApplicationInitializer {
 	registerDispatcherServlet(servletContext, context, env);
 	registerContextLoaderListener(servletContext, context, env);
 	registerRequestContextListener(servletContext);
+	//servletContext.addFilter("CharacterEncodingFilter",CharacterEncodingFilter.class).addMappingForServletNames(DispatcherType.values(),false,);
+	//
 	_logger.info("Application initialization complete");
 
     }
@@ -62,7 +63,7 @@ public class ApplicationInitializer implements WebApplicationInitializer {
     } 
 
     private void registerDispatcherServlet(ServletContext servletContext, AnnotationConfigWebApplicationContext dispatcherContext, Environment env) {
-	_logger.info("Dispatcher servlet context initilization started");
+	_logger.info("Dispatcher servlet context initialization started");
 	
 	switch(env.getActiveProfiles()[0].toUpperCase()){
 	    case "DEV":
@@ -78,14 +79,15 @@ public class ApplicationInitializer implements WebApplicationInitializer {
 		createContext(dispatcherContext, yahoo.garg.sharad.springmockitojunit.configuration.utit.WebContextConfiguration.class);
 	}
 	createContext(dispatcherContext, WebCommonContextConfig.class);
+	createContext(dispatcherContext, SwaggerUISecurityConfiguration.class);
 	ServletRegistration.Dynamic dispatcher = servletContext.addServlet(DISPATCHER_SERVLET_NAME, new DispatcherServlet(dispatcherContext));
 	dispatcher.setLoadOnStartup(1);
 	dispatcher.addMapping("/");
-	_logger.info("Dispatcher servlet context initilization completed");
+	_logger.info("Dispatcher servlet context initialization completed");
     }
 
     private void registerContextLoaderListener(ServletContext servletContext, AnnotationConfigWebApplicationContext rootContext, Environment env) {
-	_logger.info("Root application context initilization started");
+	_logger.info("Root application context initialization started");
 	switch(env.getActiveProfiles()[0].toUpperCase()){
 	    case "DEV":
 		createContext(rootContext, configurationClassesDEV);
@@ -113,9 +115,9 @@ public class ApplicationInitializer implements WebApplicationInitializer {
     private void createContext(AnnotationConfigWebApplicationContext context, final Class<?>... annotatedClasses) {
 	String classNames = "";
 	for (Class<?> annotatedClass : annotatedClasses) {
-	    classNames = classNames + annotatedClass.getSimpleName();
+	    classNames = classNames.concat(annotatedClass.getSimpleName());
 	}
-	_logger.info("Registering configuration classes to webapplication context" + classNames);
+	_logger.info("Registering configuration classes to webapplication context {0} ", classNames);
 	context.register(annotatedClasses);
     }
 
