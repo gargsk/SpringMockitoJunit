@@ -47,8 +47,6 @@ public class ApplicationInitializer implements WebApplicationInitializer {
 	registerDispatcherServlet(servletContext, context, env);
 	registerContextLoaderListener(servletContext, context, env);
 	registerRequestContextListener(servletContext);
-	//servletContext.addFilter("CharacterEncodingFilter",CharacterEncodingFilter.class).addMappingForServletNames(DispatcherType.values(),false,);
-	//
 	_logger.info("Application initialization complete");
 
     }

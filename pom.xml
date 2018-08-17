@@ -294,6 +294,11 @@
             <version>${log4j.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.lmax</groupId>
+            <artifactId>disruptor</artifactId>
+            <version>3.3.7</version>
+        </dependency>
+        <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger2</artifactId>
             <version>${swagger.version}</version>
@@ -401,6 +406,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.20.1</version>
                 <configuration>
+                    <skipTests>true</skipTests>
                     <properties>
                         <property>
                             <name>usedefaultlisteners</name>
@@ -419,14 +425,23 @@
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>2.20.1</version>
                 <configuration>
-                    <skipITs>true</skipITs>
+                    <skipITs>false</skipITs>
+                    <includes>
+                        <include>**/*IT*.java</include>
+                    </includes>
+                    <systemProperties>
+                        <property>
+                            <name>logfilename</name>
+                            <value>integration-test</value>
+                        </property>
+                    </systemProperties>
                 </configuration>
                 <executions>
                     <execution>
                         <id>integration-tests</id>
+                        <phase>integration-test</phase>
                         <goals>
                             <goal>integration-test</goal>
-                            <goal>verify</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -436,6 +451,17 @@
                 <artifactId>jetty-maven-plugin</artifactId>
                 <version>9.4.9.v20180320</version>
                 <configuration>
+                    <systemProperties>
+                        <force>true</force>
+                        <systemProperty>
+                            <name>spring.profiles.active</name>
+                            <value>SQA</value>
+                        </systemProperty>
+                        <systemProperty>
+                            <name>log4j.configurationFile</name>
+                            <value>log4j2-sqa.xml</value>
+                        </systemProperty>
+                    </systemProperties>
                     <scanIntervalSeconds>0</scanIntervalSeconds>
                     <stopKey>stop</stopKey>
                     <stopPort>9999</stopPort>
