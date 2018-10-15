@@ -9,6 +9,7 @@ import javax.servlet.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
@@ -23,6 +24,7 @@ import yahoo.garg.sharad.springmockitojunit.configuration.WebCommonContextConfig
  *
  * @author Sharad Garg Created on Oct 1, 2017 3:05:37 PM
  */
+@Order(1)
 public class ApplicationInitializer implements WebApplicationInitializer {
 
     private static final Logger _logger = LoggerFactory.getLogger(ApplicationInitializer.class);
